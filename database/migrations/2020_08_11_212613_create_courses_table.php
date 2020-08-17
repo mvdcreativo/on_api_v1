@@ -32,7 +32,7 @@ class CreateCoursesTable extends Migration
             $table->string('discount_dos')->nullable();
             $table->string('discount_tres')->nullable();
             $table->string('title_certificate')->nullable();
-            $table->string('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('requirements')->nullable();
             $table->string('price')->nullable();
             $table->integer('status_id')->unsigned();
