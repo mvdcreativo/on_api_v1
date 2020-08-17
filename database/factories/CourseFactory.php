@@ -11,7 +11,7 @@ $factory->define(Course::class, function (Faker $faker) {
     return [
         'title' => $title,
         'cupos' => rand(10,30),
-        'image' => $faker->imageUrl($width = 600 , $height = 485, 'abstract'),
+        'image' => asset("storage/images/courses")."/".rand(01,37).".jpg",
         'length' => rand(7,10),
         'length_unit_id' => rand(3,7),
         'date_ini' => $faker->dateTime($min = 'now'),
