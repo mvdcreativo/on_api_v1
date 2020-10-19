@@ -17,6 +17,7 @@ $factory->define(App\Models\Lesson::class, function (Faker $faker) {
         'price' => $faker->randomElement([null, 1500]),
         'video' => null,
         'duration' => "1hs",
-        'currency_id' => 2
+        'currency_id' => 2,
+        'position'=>rand(1,50),
     ];
 });

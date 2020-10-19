@@ -88,5 +88,11 @@ class Status extends Model
         return $this->hasMany(\App\Models\Lesson::class);
     }
 
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     **/
+    public function orders()
+    {
+        return $this->hasMany(\App\Models\Order::class);
+    }
 }

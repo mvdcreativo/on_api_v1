@@ -56,4 +56,12 @@ class Role extends Model
     {
         return $this->belongsToMany(\App\Models\Permission::class, 'permission_role_pivot');
     }
+
+
+    public function accounts()
+    {
+        return $this->hasMany(\App\Models\Account::class);
+    }
+
+
 }

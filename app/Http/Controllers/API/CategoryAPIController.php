@@ -36,7 +36,23 @@ class CategoryAPIController extends AppBaseController
             $query->limit($request->get('limit'));
         }
 
-        $categories = $query->with('courses')->get();
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        }
+        
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        $categories = $query
+        ->with('courses')
+        ->filter($request->get('filter'))
+        ->orderBy('id', $sort)
+        ->paginate($per_page);
 
         return $this->sendResponse($categories->toArray(), 'Categories retrieved successfully');
     }

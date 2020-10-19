@@ -69,7 +69,18 @@ class Category extends Model
     }
 
 
-    ////SCOPES
+      /////////////////////////////
+        ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if($filter)
+
+            return $query
+                ->orWhere('name', "LIKE", '%'.$filter.'%');
+
+    }
     
     public function scopeFilter_status($query)
     {
@@ -77,4 +88,7 @@ class Category extends Model
             $q->whereIn('status_id', [1,3]);
         }]);
     }
+
+
+
 }

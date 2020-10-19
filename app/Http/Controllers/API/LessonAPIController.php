@@ -8,6 +8,8 @@ use App\Models\Lesson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Response;
+use Illuminate\Support\Str;
+
 
 /**
  * Class LessonController
@@ -50,6 +52,7 @@ class LessonAPIController extends AppBaseController
     public function store(CreateLessonAPIRequest $request)
     {
         $input = $request->all();
+        $input['slug'] = Str::slug($request->name);
 
         /** @var Lesson $lesson */
         $lesson = Lesson::create($input);
@@ -90,6 +93,7 @@ class LessonAPIController extends AppBaseController
     {
         /** @var Lesson $lesson */
         $lesson = Lesson::find($id);
+        if($request->name) $lesson['slug'] = Str::slug($request->name);
 
         if (empty($lesson)) {
             return $this->sendError('Lesson not found');
@@ -123,5 +127,24 @@ class LessonAPIController extends AppBaseController
         $lesson->delete();
 
         return $this->sendSuccess('Lesson deleted successfully');
+    }
+
+
+
+
+    public function sort_lesson(Request $request)
+    {
+        // return $request->all();
+        $list = $request->all();
+        $func_modif = function($item, $i){
+            
+            $lesson = Lesson::find($item['id']);
+            $lesson->position = $i + 1;
+            $lesson->save();
+            return $lesson;
+        };
+        $listSort = array_map($func_modif, $list, array_keys($list));
+
+        return $this->sendResponse($listSort, 'Lessons updated successfully');
     }
 }

@@ -124,7 +124,7 @@ class AdquiredSkillAPIController extends AppBaseController
         }
 
         $adquiredSkill->delete();
-
-        return $this->sendSuccess('Adquired Skill deleted successfully');
+        return $this->sendResponse($adquiredSkill->toArray(), 'Adquired Skill deleted successfully');
+ 
     }
 }

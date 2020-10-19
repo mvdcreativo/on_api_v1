@@ -33,7 +33,8 @@ class CourseSection extends Model
         'title',
         'init_date',
         'description',
-        'slug'
+        'slug',
+        'position'
     ];
 
     /**
@@ -46,7 +47,8 @@ class CourseSection extends Model
         'title' => 'string',
         'init_date' => 'string',
         'slug' => 'string',
-        'status_id' => 'integer'
+        'status_id' => 'integer',
+        'position' => 'integer'
     ];
 
     /**
@@ -63,7 +65,7 @@ class CourseSection extends Model
      **/
     public function lessons()
     {
-        return $this->hasMany(\App\Models\Lesson::class);
+        return $this->hasMany(\App\Models\Lesson::class)->orderBy('position');
     }
 
     /**

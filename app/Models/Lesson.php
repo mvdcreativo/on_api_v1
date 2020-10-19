@@ -36,6 +36,7 @@ class Lesson extends Model
         'video',
         'duration',
         'currency_id',
+        'position'
     ];
 
     /**
@@ -47,7 +48,8 @@ class Lesson extends Model
         'id' => 'integer',
         'name' => 'string',
         'course_section_id' => 'integer',
-        'slug' => 'string'
+        'slug' => 'string',
+        'position' => 'integer'
     ];
 
     /**
@@ -65,5 +67,10 @@ class Lesson extends Model
     public function courseSection()
     {
         return $this->belongsTo(\App\Models\CourseSection::class);
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany('App\Models\Orders');
     }
 }

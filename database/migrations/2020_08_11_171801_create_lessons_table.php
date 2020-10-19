@@ -22,6 +22,8 @@ class CreateLessonsTable extends Migration
             $table->float('price')->nullable();
             $table->string('video')->nullable();
             $table->string('duration')->nullable();
+            $table->integer('position')->nullable();
+
 
             $table->integer('currency_id')->unsigned()->nullable();
             $table->integer('course_section_id')->unsigned();

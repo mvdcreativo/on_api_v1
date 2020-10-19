@@ -55,7 +55,10 @@ class Account extends Model
         'address_one',
         'address_two',
         'image',
-        'birth'
+        'birth',
+        'role_id',
+        'n_doc_iden',
+        'type_doc_iden'
     ];
 
     /**
@@ -78,7 +81,10 @@ class Account extends Model
         'address_two' => 'string',
         'image' => 'string',
         'role_id' => 'integer',
-        'birth' => 'date'
+        'birth' => 'string',
+        'type_doc_iden' =>'string',
+        'n_doc_iden' =>'string',
+        
     ];
 
     /**
@@ -93,14 +99,66 @@ class Account extends Model
 
 
     ///RELATIONSHIP
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     **/
+    public function role()
+    {
+        return $this->belongsTo(\App\Models\Role::class);
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     **/
+    public function courses()
+    {
+        return $this->belongsToMany(\App\Models\Course::class, 'course_user_pivot');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     **/
+    public function reviews()
+    {
+        return $this->hasMany(\App\Models\Review::class);
+        
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     **/
+    public function reviews_referred()
+    {
+        return $this->hasMany(\App\Models\Review::class, 'user_referred_id');
+        
+    }
+
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasOne
     **/
     public function user()
     {
-        return $this->hasOne(\App\Models\User::class);
+        return $this->belongsTo(\App\User::class);
     }
 
+
+    /////////////////////////////
+        ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if($filter)
+
+            return $query;
+                // ->with('user')
+                // ->orWhere('user.name', "LIKE", '%'.$filter.'%')
+                // ->orWhere('user.email', "LIKE", '%'.$filter.'%');
+
+
+    }
 
     
 }

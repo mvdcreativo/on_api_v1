@@ -20,7 +20,8 @@ class CreateCourseSectionsTable extends Migration
             $table->string('slug');
             $table->string('init_date')->nullable();
             $table->longText('description')->nullable();
-            $table->integer('status_id')->unsigned();
+            $table->integer('position')->nullable();
+            $table->integer('status_id')->unsigned()->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('status_id')->references('id')->on('statuses');

@@ -20,6 +20,7 @@ class CreateCoursesTable extends Migration
             $table->string('slug');
             $table->integer('cupos')->nullable();
             $table->string('image')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->longText('schedule')->nullable();
             $table->integer('length')->nullable();
             $table->string('date_ini')->nullable();
@@ -33,7 +34,7 @@ class CreateCoursesTable extends Migration
             $table->string('discount_tres')->nullable();
             $table->string('title_certificate')->nullable();
             $table->longText('description')->nullable();
-            $table->string('requirements')->nullable();
+            $table->longText('requirements')->nullable();
             $table->string('price')->nullable();
             $table->integer('status_id')->unsigned();
             $table->integer('currency_id')->unsigned()->nullable();

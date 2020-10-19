@@ -47,7 +47,9 @@ class Course extends Model
         'title',
         'cupos',
         'image',
+        'thumbnail',
         'length',
+        'length_unit_id',
         'effort',
         'level_id',
         'user_instructor_id',
@@ -75,6 +77,7 @@ class Course extends Model
         'title' => 'string',
         'cupos' => 'integer',
         'image' => 'string',
+        'thumbnail'=> 'string',
         'length' => 'integer',
         'length_unit_id' => 'integer',
         'effort' => 'string',
@@ -107,7 +110,7 @@ class Course extends Model
      **/
     public function categories()
     {
-        return $this->belongsToMany(\App\Models\Category::class, 'category_course_pivot');
+        return $this->belongsToMany(\App\Models\Category::class, 'category_course_pivot')->with('courses');
     }
 
     /**
@@ -155,7 +158,7 @@ class Course extends Model
      **/
     public function courseSections()
     {
-        return $this->belongsToMany(\App\Models\CourseSection::class, 'course_section_course_pivot')->with('lessons');
+        return $this->belongsToMany(\App\Models\CourseSection::class, 'course_section_course_pivot')->with('lessons')->orderBy('position');
     }
 
 
@@ -172,6 +175,24 @@ class Course extends Model
     public function alumnos()
     {
         return $this->belongsToMany('App\User', 'course_user_pivot');
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany('App\Models\Orders');
+    }
+
+    /////////////////////////////
+        ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if($filter)
+
+            return $query
+                ->orWhere('title', "LIKE", '%'.$filter.'%');
+
     }
 
 

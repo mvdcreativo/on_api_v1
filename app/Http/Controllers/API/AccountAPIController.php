@@ -34,7 +34,30 @@ class AccountAPIController extends AppBaseController
             $query->limit($request->get('limit'));
         }
 
-        $accounts = $query->get();
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        }
+        
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        if ($request->get('filter')) {
+            $filter = $request->get('filter');
+        }else{
+            $filter = "";
+        }
+
+        $accounts = $query
+            ->with('user')
+            ->filter($filter)
+            // ->whereIn('status_id', [1,3])
+            // ->orderBy('user.name', $sort)
+            ->paginate($per_page);
 
         return $this->sendResponse($accounts->toArray(), 'Accounts retrieved successfully');
     }
@@ -51,6 +74,7 @@ class AccountAPIController extends AppBaseController
     {
         $input = $request->all();
 
+        
         /** @var Account $account */
         $account = Account::create($input);
 
@@ -123,5 +147,20 @@ class AccountAPIController extends AppBaseController
         $account->delete();
 
         return $this->sendSuccess('Account deleted successfully');
+    }
+
+
+
+
+
+
+    public function get_user_instructors(Request $request)
+    {
+        $query = Account::query();
+        $query->with('user','role');
+        $query->where('role_id', 1);
+        $statuses = $query->get();
+
+        return $this->sendResponse($statuses->toArray(), 'Statuses retrieved successfully');
     }
 }

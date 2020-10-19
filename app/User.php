@@ -5,10 +5,14 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
+
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    // use SoftDeletes;
+
+    use HasApiTokens,Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -36,46 +40,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-
-
     
     ///RELATIONSHIP
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     **/
-    public function role()
-    {
-        return $this->belongsTo(\App\Models\Role::class);
-    }
-
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     **/
-    public function courses()
-    {
-        return $this->belongsToMany(\App\Models\Course::class, 'course_user_pivot');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     **/
-    public function reviews()
-    {
-        return $this->hasMany(\App\Models\Review::class);
-        
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     **/
-    public function reviews_referred()
-    {
-        return $this->hasMany(\App\Models\Review::class, 'user_referred_id');
-        
-    }
 
 
     /**
@@ -83,7 +49,28 @@ class User extends Authenticatable
      **/
     public function account()
     {
-        return $this->belongsTo(\App\Models\Account::class, 'id', 'user_id');
+        return $this->hasOne(\App\Models\Account::class);
+    }
+
+
+    public function orders()
+    {
+        return $this->hasMany(\App\Models\Order::class);
+    }
+
+    /////////////////////////////
+        ///SCOPES
+    /////////////////////////////
+
+    public function scopeFilter($query, $filter)
+    {
+        if($filter)
+
+            return $query
+                ->orWhere('name', "LIKE", '%'.$filter.'%')
+                ->orWhere('email', "LIKE", '%'.$filter.'%');
+
+
     }
 
     

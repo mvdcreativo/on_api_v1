@@ -15,6 +15,7 @@ class CreateAccountsTable extends Migration
     public function up()
     {
         Schema::create('accounts', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->longText('bio')->nullable();
             $table->string('certificated')->nullable();
@@ -22,16 +23,19 @@ class CreateAccountsTable extends Migration
             $table->integer('rating_down')->nullable();
             $table->string('n_identification')->nullable();
             $table->string('phone_one')->nullable();
-            $table->integer('phone_two')->nullable();
+            $table->string('phone_two')->nullable();
             $table->string('address_one')->nullable();
             $table->string('address_two')->nullable();
             $table->string('image')->nullable();
             $table->integer('role_id')->unsigned();
-            $table->date('birth')->nullable();
+            $table->string('birth')->nullable();
+            $table->string('n_doc_iden')->nullable();
+            $table->string('type_doc_iden')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('role_id')->references('id')->on('roles');
+
         });
     }
 

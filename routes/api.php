@@ -14,9 +14,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', 'Auth\AuthController@login');
+    Route::post('signup', 'Auth\AuthController@signup');
+  
+    Route::group(['middleware' => 'auth:api'], function() {
+        Route::get('logout', 'Auth\AuthController@logout');
+        Route::get('user', 'Auth\AuthController@user');
+
+        // Route::apiResource('users', 'UserAPIController');
+    });
+
+
+
 });
+
+Route::apiResource('users', 'UserAPIController');
 
 
 Route::apiResource('currencies', 'CurrencyAPIController');
@@ -39,9 +52,18 @@ Route::apiResource('adquired_skills', 'AdquiredSkillAPIController');
 
 Route::apiResource('categories', 'CategoryAPIController');
 
+Route::apiResource('schedules', 'ScheduleAPIController');
+
+
 Route::apiResource('courses', 'CourseAPIController');
 Route::get('course/{slug}', 'CourseAPIController@showBySlug');
 Route::get('courses-category/{slug}', 'CourseAPIController@getByCategorySlug');
 Route::get('courses-destac', 'CourseAPIController@getCoursesDestac');
+// Route::get('instructors', 'UserAPIController@get_user_instructors');
+Route::apiResource('accounts', 'AccountAPIController');
+Route::apiResource('instructors', 'InstructorAPIController');
+Route::apiResource('students', 'StudentAPIController');
+// Route::get('instructors', 'InstructorAPIController');
 
-// Route::apiResource('accounts', 'AccountAPIController');
+Route::put('course_sections_sort','CourseSectionAPIController@sort_section');
+Route::put('lessons_sort','LessonAPIController@sort_lesson');

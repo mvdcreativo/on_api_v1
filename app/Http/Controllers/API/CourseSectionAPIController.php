@@ -7,6 +7,8 @@ use App\Http\Requests\API\UpdateCourseSectionAPIRequest;
 use App\Models\CourseSection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Str;
+
 use Response;
 
 /**
@@ -50,9 +52,13 @@ class CourseSectionAPIController extends AppBaseController
     public function store(CreateCourseSectionAPIRequest $request)
     {
         $input = $request->all();
+        $input['slug'] = Str::slug($request->title);
+        if($request->product_id) $course_id = $request->product_id;
 
         /** @var CourseSection $courseSection */
         $courseSection = CourseSection::create($input);
+        $courseSection->courses()->sync($course_id);
+
 
         return $this->sendResponse($courseSection->toArray(), 'Course Section saved successfully');
     }
@@ -89,7 +95,10 @@ class CourseSectionAPIController extends AppBaseController
     public function update($id, UpdateCourseSectionAPIRequest $request)
     {
         /** @var CourseSection $courseSection */
-        $courseSection = CourseSection::find($id);
+        $courseSection = CourseSection::with('courses')->find($id);
+        
+        if($request->title) $courseSection['slug'] = Str::slug($request->title);
+        if($request->product_id) $course_id = $request->product_id;
 
         if (empty($courseSection)) {
             return $this->sendError('Course Section not found');
@@ -97,6 +106,8 @@ class CourseSectionAPIController extends AppBaseController
 
         $courseSection->fill($request->all());
         $courseSection->save();
+        $courseSection->courses()->sync($course_id);
+
 
         return $this->sendResponse($courseSection->toArray(), 'CourseSection updated successfully');
     }
@@ -123,5 +134,23 @@ class CourseSectionAPIController extends AppBaseController
         $courseSection->delete();
 
         return $this->sendSuccess('Course Section deleted successfully');
+    }
+
+
+    public function sort_section(Request $request)
+    {
+        // return $request->all();
+        $list = $request->all();
+        ;
+        $func_modif = function($item, $i){
+            
+            $courseSection = CourseSection::find($item['id']);
+            $courseSection->position = $i + 1;
+            $courseSection->save();
+            return $courseSection;
+        };
+        $listSort = array_map($func_modif, $list, array_keys($list));
+
+        return $this->sendResponse($listSort, 'CourseSection updated successfully');
     }
 }
