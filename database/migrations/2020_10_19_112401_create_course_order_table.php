@@ -17,7 +17,7 @@ class CreateCourseOrderTable extends Migration
             $table->bigIncrements('id');
             $table->integer('quantity');
             $table->float('price');
-            $table->unsignedBigInteger('course_id');
+            $table->unsignedInteger('course_id');
             $table->unsignedBigInteger('order_id');
             $table->timestamps();
 
