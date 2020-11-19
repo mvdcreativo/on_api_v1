@@ -19,7 +19,7 @@ class CurrencySeeder extends Seeder
 
         $currency = new App\Models\Currency;
         $currency->name = "Pesos Uruguayos";
-        $currency->symbol = "$";
+        $currency->symbol = "UYU";
         $currency->value = 0.0125;
         $currency->save();
     }

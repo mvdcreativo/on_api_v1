@@ -5,31 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * Class Account
- * @package App\Models
- * @version August 16, 2020, 2:43 pm UTC
- *
- * @property \App\Models\User $user
- * @property \Illuminate\Database\Eloquent\Collection $curses
- * @property \App\Models\Role $role
- * @property \Illuminate\Database\Eloquent\Collection $courses
- * @property \Illuminate\Database\Eloquent\Collection $reviews
- * @property string $name
- * @property string $bio
- * @property string $slug
- * @property string $certificated
- * @property integer $rating_up
- * @property integer $rating_down
- * @property string $n_identification
- * @property string $last_name
- * @property string $phone_one
- * @property integer $phone_two
- * @property string $address_one
- * @property string $address_two
- * @property string $image
- * @property string $birth
- */
+
 class Account extends Model
 {
     use SoftDeletes;
@@ -49,7 +25,6 @@ class Account extends Model
         'rating_up',
         'rating_down',
         'n_identification',
-        'last_name',
         'phone_one',
         'phone_two',
         'address_one',

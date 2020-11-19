@@ -318,6 +318,8 @@ class CourseAPIController extends AppBaseController
         return $this->sendResponse($courses->toArray(), 'Courses retrieved successfully');     
     }
 
+
+    
     private function transformImage($image, $width, $height, $path)
     {
         $result_image = AlterImage::make($image)->encode('jpg',75);

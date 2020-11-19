@@ -58,6 +58,15 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Order::class);
     }
 
+
+    public function courses()
+    {
+        return $this->belongsToMany('App\Models\Course', 'course_order')
+        ->using(\App\Models\CourseOrderPivot::class)
+        ->withPivot('price', 'currency_id', 'course_id', 'quantity','order_id','user_id');
+    }
+
+
     /////////////////////////////
         ///SCOPES
     /////////////////////////////

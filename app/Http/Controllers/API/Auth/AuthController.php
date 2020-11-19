@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Http\Controllers\API\UserAPIController;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -10,30 +11,37 @@ use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\Auth;
 
-class AuthController extends Controller
+class AuthController extends UserAPIController
 {
     ///REGISTRO
     public function signup(Request $request)
     {
         $request->validate([
             'name'     => 'required|string',
+            'last_name'=> 'required|string',
             'email'    => 'required|string|email|unique:users',
             'password' => 'required|string|confirmed',
         ]);
-        $user = new User([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => bcrypt($request->password),
-            'slug'     => Str::slug($request->name)
-        ]);
-        $user->save();
-        if($user){
-            
-           $newUser =  $this->login($request);
+        
+        // $password = bcrypt($request->get('password')) ;
+         
+        // $request['password'] = bcrypt($password);
+        $user = $this->store($request);
+        // $user = new User([
+        //     'name'     => $request->name,
+        //     'email'    => $request->email,
+        //     'password' => bcrypt($request->password),
+        //     'slug'     => Str::slug($request->name)
+        // ]);
+        // $user->save();
+        if(isset($user)){
+            // $request['password'] = $request->get('password');
+            $newUser =  $this->login($request);
         };
         return response()->json([
             'user' => $newUser->original,
-            'message' => 'Successfully created user!'], 201);
+            'message' => 'Successfully created user!'
+        ], 201);
     }
 
     //LOGIN
@@ -83,7 +91,7 @@ class AuthController extends Controller
     //USUARIO
     public function user(Request $request)
     {
-        // return response()->json($request->user());
-        return User::all();
+        return response()->json($request->user());
+        // return User::all();
     }
 }

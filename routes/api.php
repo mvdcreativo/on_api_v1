@@ -32,6 +32,8 @@ Route::group(['prefix' => 'auth'], function () {
 Route::apiResource('users', 'UserAPIController');
 
 
+Route::apiResource('orders', 'OrderAPIController');
+
 Route::apiResource('currencies', 'CurrencyAPIController');
 
 Route::apiResource('roles', 'RoleAPIController');
@@ -56,6 +58,7 @@ Route::apiResource('schedules', 'ScheduleAPIController');
 
 
 Route::apiResource('courses', 'CourseAPIController');
+Route::get('user_courses/{id}', 'UserAPIController@user_courses');
 Route::get('course/{slug}', 'CourseAPIController@showBySlug');
 Route::get('courses-category/{slug}', 'CourseAPIController@getByCategorySlug');
 Route::get('courses-destac', 'CourseAPIController@getCoursesDestac');

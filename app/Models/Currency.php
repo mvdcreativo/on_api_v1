@@ -56,4 +56,8 @@ class Currency extends Model
     {
         return $this->hasMany('App\Models\Couses');
     }
+    public function orders()
+    {
+        return $this->hasMany('App\Models\Order');
+    }
 }

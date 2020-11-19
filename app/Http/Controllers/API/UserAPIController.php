@@ -71,7 +71,14 @@ class UserAPIController extends AppBaseController
         $input_user = $request->only(['name','last_name','email','password']);
         $input_account = $request->except(['name','last_name','email','password', 'image']);
         $input_user['slug'] = Str::slug($request->name."-".$request->last_name);
-        if($request->role_id) $input_account['role_id'] = (int)$request->role_id;
+        if($request->role_id) {
+            $input_account['role_id'] = (int)$request->role_id;
+        }else{
+            $input_account['role_id'] = 2;
+        }
+        if ($request->get('password')) {
+            $input_user['password'] = bcrypt($request->get('password'));
+        }
 
         $user = new User;
         $user->fill($input_user);
@@ -113,8 +120,10 @@ class UserAPIController extends AppBaseController
                 }
             }
         }
-
-        return $this->sendResponse($user->toArray(), 'Account updated successfully');
+        if($request->password){
+            return $user;
+        }
+        return $this->sendResponse($user->toArray(), 'Account stored successfully');
     }
 
     /**
@@ -227,4 +236,35 @@ class UserAPIController extends AppBaseController
         
     }
 
+
+
+    public function user_courses($id, Request $request)
+    {
+        $query = User::find($id);
+        
+        if ($request->get('per_page')) {
+            $per_page = $request->get('per_page');
+        }else{
+            $per_page = 20;
+        }
+        
+        if ($request->get('sort')) {
+            $sort = $request->get('sort');
+        }else{
+            $sort = "desc";
+        }
+
+        $courses = $query
+            // ->with('courses')
+            ->courses()
+            // ->with('categories', 'lengthUnit', 'user_instructor', 'courseSections', 'currency')
+            // ->filter($request->get('filter'))
+            // ->whereIn('status_id', [1,3])
+            // ->orderBy('id', $sort)
+            ->paginate($per_page);
+
+
+
+        return $this->sendResponse($courses->toArray(), 'Courses retrieved successfully');
+    }
 }
