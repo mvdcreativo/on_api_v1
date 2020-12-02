@@ -53,10 +53,13 @@ class CourseAPIController extends AppBaseController
             $sort = "desc";
         }
 
+
+
         $courses = $query
             ->with('categories', 'lengthUnit', 'user_instructor', 'courseSections', 'currency')
             ->filter($request->get('filter'))
-            ->whereIn('status_id', [1,3])
+            ->status($request->get('status'))
+            // ->whereIn('status_id', [1,3])
             ->orderBy('id', $sort)
             ->paginate($per_page);
 
@@ -133,7 +136,6 @@ class CourseAPIController extends AppBaseController
     {
         /** @var Course $course */
         $course = Course::with('categories', 'lengthUnit', 'user_instructor', 'courseSections', 'currency','adquiredSkills','schedules')
-        ->whereIn('status_id', [1,3])
         ->find($id);
 
         if (empty($course)) {
@@ -236,7 +238,25 @@ class CourseAPIController extends AppBaseController
     }
 
 
+    public function clone(Request $request){
+        $request->validate(['id' => 'required']);
 
+        $course = Course::find($request->id);
+
+
+        $title = $course->title;
+        $course->title = "COPIA-".$title;
+        $course->slug = Str::slug("COPIA-".$title);
+        $course->status_id = 2;
+        $course->group = $course->group +1;
+        $course->cupos_confirmed = 0;
+        if(!isset($course->original_id)) $course->original_id = $course->id;
+        
+
+        $duplicatedModel = $course->saveAsDuplicate();
+
+        return $this->sendResponse($duplicatedModel->toArray(), 'Course saved successfully');
+    }
 
 
             /**

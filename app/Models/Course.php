@@ -5,36 +5,15 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-/**
- * Class Course
- * @package App\Models
- * @version August 11, 2020, 9:26 pm UTC
- *
- * @property \Illuminate\Database\Eloquent\Collection $categories
- * @property \App\Models\LengthUnit $lengthUnit
- * @property \App\Models\Level $level
- * @property \App\Models\User $user
- * @property \Illuminate\Database\Eloquent\Collection $adquiredSkills
- * @property \Illuminate\Database\Eloquent\Collection $courseSections
- * @property string $title
- * @property integer $cupos
- * @property string $image
- * @property string $schedule
- * @property integer $length
- * @property string $effort
- * @property integer $level_id
- * @property integer $user_instructor_id
- * @property string $certificate
- * @property string $discount_uno
- * @property string $discount_dos
- * @property string $discount_tres
- * @property string $title_certificate
- * @property string $description
- * @property integer $requirements
- */
+use Neurony\Duplicate\Options\DuplicateOptions;
+use Neurony\Duplicate\Traits\HasDuplicates;
+
+
 class Course extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasDuplicates;
+
+    
 
     public $table = 'courses';
     
@@ -46,6 +25,7 @@ class Course extends Model
     public $fillable = [
         'title',
         'cupos',
+        'cupos_confirmed',
         'image',
         'thumbnail',
         'length',
@@ -64,7 +44,9 @@ class Course extends Model
         'price',
         'currency_id',
         'date_ini',
-        'status_id'
+        'status_id',
+        'original_id',
+        'group'
     ];
 
     /**
@@ -75,7 +57,10 @@ class Course extends Model
     protected $casts = [
         'id' => 'integer',
         'title' => 'string',
+        'original_id' => 'string',
         'cupos' => 'integer',
+        'cupos_confirmed' => 'integer',
+        'group' => 'integer',
         'image' => 'string',
         'thumbnail'=> 'string',
         'length' => 'integer',
@@ -179,7 +164,7 @@ class Course extends Model
 
     public function orders()
     {
-        return $this->belongsToMany('App\Models\Orders');
+        return $this->belongsToMany('App\Models\Order');
     }
 
     /////////////////////////////
@@ -191,9 +176,25 @@ class Course extends Model
         if($filter)
 
             return $query
+                ->where('id', $filter)
                 ->orWhere('title', "LIKE", '%'.$filter.'%');
 
     }
 
+    public function scopeStatus($query, $filter)
+    {
+        if($filter){
+            $filters = json_decode($filter);
+            $query->whereIn('status_id', $filters);
+        }
 
+        return $query;
+    }
+
+
+
+    public function getDuplicateOptions(): DuplicateOptions
+    {
+        return DuplicateOptions::instance()->excludeRelations('orders', 'alumnos');
+    }
 }

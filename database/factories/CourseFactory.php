@@ -8,9 +8,11 @@ use Illuminate\Support\Str;
 
 $factory->define(Course::class, function (Faker $faker) {
     $title = "Curso prueba ".$faker->sentence($nbWords = 4, $variableNbWords = true);
+    $cupos = rand(10,30);
     return [
         'title' => $title,
-        'cupos' => rand(10,30),
+        'cupos' => $cupos,
+        'cupos_confirmed' => $cupos - rand(0,10),
         'image' => asset("storage/images/courses")."/".rand(01,37).".jpg",
         'length' => rand(7,10),
         'length_unit_id' => rand(3,7),

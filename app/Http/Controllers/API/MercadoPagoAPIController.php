@@ -28,7 +28,7 @@ class MercadoPagoAPIController extends AppBaseController
 
   public function generate_payment_initpoint(Order $order)
   {
-
+    
     # Create a preference object
     $preference = new Preference();
     // dd($order);
@@ -38,7 +38,7 @@ class MercadoPagoAPIController extends AppBaseController
     }
 
      # Create an item object
-    // $items = Array();
+    $items = Array();
 
     foreach ($order->courses as $product) {
       $item = new Item();

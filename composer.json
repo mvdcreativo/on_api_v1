@@ -23,7 +23,9 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "laravelcollective/html": "^6.1",
-        "mercadopago/dx-php": "^2.2"
+        "lcobucci/jwt": "3.3.3",
+        "mercadopago/dx-php": "^2.2",
+        "neurony/laravel-duplicate": "^4.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
