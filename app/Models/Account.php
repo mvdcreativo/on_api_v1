@@ -33,7 +33,8 @@ class Account extends Model
         'birth',
         'role_id',
         'n_doc_iden',
-        'type_doc_iden'
+        'type_doc_iden',
+        'neighborhood_id'
     ];
 
     /**
@@ -54,6 +55,7 @@ class Account extends Model
         'phone_two' => 'integer',
         'address_one' => 'string',
         'address_two' => 'string',
+        'neighborhood_id' => 'integer',
         'image' => 'string',
         'role_id' => 'integer',
         'birth' => 'string',
@@ -116,6 +118,14 @@ class Account extends Model
     public function user()
     {
         return $this->belongsTo(\App\User::class);
+    }
+
+    /**
+    * @return \Illuminate\Database\Eloquent\Relations\HasOne
+    **/
+    public function neighborhood()
+    {
+        return $this->belongsTo(\App\Models\Neighborhood::class);
     }
 
 

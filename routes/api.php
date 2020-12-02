@@ -58,6 +58,7 @@ Route::apiResource('schedules', 'ScheduleAPIController');
 
 
 Route::apiResource('courses', 'CourseAPIController');
+Route::post('clone', 'CourseAPIController@clone');
 Route::get('user_courses/{id}', 'UserAPIController@user_courses');
 Route::get('course/{slug}', 'CourseAPIController@showBySlug');
 Route::get('courses-category/{slug}', 'CourseAPIController@getByCategorySlug');
@@ -66,6 +67,10 @@ Route::get('courses-destac', 'CourseAPIController@getCoursesDestac');
 Route::apiResource('accounts', 'AccountAPIController');
 Route::apiResource('instructors', 'InstructorAPIController');
 Route::apiResource('students', 'StudentAPIController');
+Route::apiResource('states', 'StateAPIController');
+Route::apiResource('cities', 'CityAPIController');
+Route::apiResource('neighborhoods', 'NeighborhoodAPIController');
+
 // Route::get('instructors', 'InstructorAPIController');
 
 Route::put('course_sections_sort','CourseSectionAPIController@sort_section');

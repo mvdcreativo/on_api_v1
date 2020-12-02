@@ -19,6 +19,7 @@ $factory->define(Account::class, function (Faker $faker) {
         'address_two' => null,
         'image' => asset("storage/images/users")."/".rand(1,30).".jpeg",
         'role_id' => 1,
-        'birth' => $faker->dateTime($max = 'now')
+        'birth' => $faker->dateTime($max = 'now'),
+        'neighborhood_id' => rand(1,8)
     ];
 });

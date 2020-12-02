@@ -28,12 +28,6 @@ class AdquiredSkillAPIController extends AppBaseController
     {
         $query = AdquiredSkill::query();
 
-        if ($request->get('skip')) {
-            $query->skip($request->get('skip'));
-        }
-        if ($request->get('limit')) {
-            $query->limit($request->get('limit'));
-        }
 
         $adquiredSkills = $query->get();
 

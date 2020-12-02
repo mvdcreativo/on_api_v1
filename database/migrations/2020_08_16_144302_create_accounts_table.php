@@ -30,10 +30,13 @@ class CreateAccountsTable extends Migration
             $table->integer('role_id')->unsigned();
             $table->string('birth')->nullable();
             $table->string('n_doc_iden')->nullable();
-            $table->string('type_doc_iden')->nullable();
+            $table->string('type_doc_iden')->nullable();            
+            $table->integer('neighborhood_id')->unsigned();
+
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('neighborhood_id')->references('id')->on('neighborhoods')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('role_id')->references('id')->on('roles');
 
         });
