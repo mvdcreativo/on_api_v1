@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\AppBaseController;
-use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
+use App\Exports\StudentsCourseExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class OrderAPIController extends AppBaseController
@@ -39,12 +40,19 @@ class OrderAPIController extends AppBaseController
         } else {
             $user_id = "";
         }
+        if ($request->get('course_id')) {
+            $course_id = $request->get('course_id');
+        } else {
+            $course_id = "";
+        }
 
+        
+        
         $orders = $query
             ->with('courses', 'currency', 'user')
             ->filter($filter)
             ->user($user_id)
-            // ->whereIn('status_id', [1,3])
+            ->course_id($course_id)
             ->orderBy('id', $sort)
             ->paginate($per_page);
 
@@ -71,10 +79,12 @@ class OrderAPIController extends AppBaseController
             foreach ($request->get('products') as $key => $product) {
 
                 $course = Course::find($product['course_id']);
-
+                if (empty($course)) {
+                    return $this->sendError('Course not found');
+                }
                 $cupos_confirmed = $course->cupos_confirmed;
 
-                if ($cupos_confirmed < $course->cupos) {
+                if ($cupos_confirmed <= $course->cupos) {
                     $course->cupos_confirmed = $cupos_confirmed + 1;
                     if ($course->cupos_confirmed >= $course->cupos){
                         $course->status_id = 2;
@@ -82,10 +92,13 @@ class OrderAPIController extends AppBaseController
                         $new_course = Course::whereIn('original_id', [$course->original_id, $course->id])
                             ->where('group', $course->group + 1)
                             ->first();
+                        if (empty($new_course)) {
+                            return $this->sendError('New Course not found');
+                        }
                         $new_course->status_id = 1;
                         $new_course->save();
                         
-                    } 
+                    }
                         
 
                 } else {
@@ -94,6 +107,7 @@ class OrderAPIController extends AppBaseController
                     $new_course = Course::whereIn('original_id', [$course->original_id, $course->id])
                         ->where('group', $course->group + 1)
                         ->first();
+                    
                     $new_course->status_id = 1;
                     $new_course->save();
 
@@ -107,10 +121,17 @@ class OrderAPIController extends AppBaseController
                     );
                 }
             }
+            $course->save();
             $order->save();
             $order->courses()->attach($request->get('products'));
-            $generate_payment = new MercadoPagoAPIController;
+            $order->courses;
+            $order->user->account;
+            
+            if($request->get('type_pay') && $request->get('type_pay') == "PL"){
+                return $this->sendResponse($order->toArray(), 'Order saved successfully');
+            }
             if($order->courses) {
+                $generate_payment = new MercadoPagoAPIController;
                 return response()->json(["init_point" => $generate_payment->generate_payment_initpoint($order)], 200);
             }
         }
@@ -125,7 +146,7 @@ class OrderAPIController extends AppBaseController
     public function show($id)
     {
 
-        $order = Order::with('courses')->find($id);
+        $order = Order::with('courses','user')->find($id);
 
         if (empty($order)) {
             return $this->sendError('Order not found');
@@ -169,4 +190,20 @@ class OrderAPIController extends AppBaseController
 
         return $this->sendSuccess('Order deleted successfully');
     }
+
+
+
+
+        ////////  EXPORTS ///////////   
+
+        public function export_students_course_excel(Request $request){
+            // Storage::disk('public')->put('images/productos',  $img);
+
+            $course_id = $request->get('course_id');
+
+            return Excel::download(new StudentsCourseExport($course_id), 'lista_alumnos.xlsx');
+            
+        }
+       
+        ///////////////////////
 }

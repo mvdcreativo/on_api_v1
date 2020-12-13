@@ -28,11 +28,15 @@ Route::group(['prefix' => 'auth'], function () {
 
 
 });
+Route::post('social-auth', 'Auth\SocialAuthController@loginSocial');
+
 
 Route::apiResource('users', 'UserAPIController');
 
 
 Route::apiResource('orders', 'OrderAPIController');
+
+Route::get('enrollments', 'EnrollmentAPIController@indexEnrollments');
 
 Route::apiResource('currencies', 'CurrencyAPIController');
 
@@ -75,3 +79,11 @@ Route::apiResource('neighborhoods', 'NeighborhoodAPIController');
 
 Route::put('course_sections_sort','CourseSectionAPIController@sort_section');
 Route::put('lessons_sort','LessonAPIController@sort_lesson');
+
+
+Route::group(['prefix' => 'exports'], function () {
+    ///Exports
+    Route::get('student_course', 'OrderAPIController@export_students_course_excel');
+  
+
+});

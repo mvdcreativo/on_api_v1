@@ -20,6 +20,10 @@ class UserSeeder extends Seeder
         $user->email = "admin@admin.com";
         $user->password = Hash::make('admin');
         $user->save();
+        factory(App\Models\Account::class)->create([
+            'user_id' => $user->id,
+            'role_id' => 3
+        ]);
 
         $name= "Emir Méndez";
         $lastName = "";
@@ -30,6 +34,10 @@ class UserSeeder extends Seeder
         $user->email = "mvdcreativo@gmail.com";
         $user->password = Hash::make('admin');
         $user->save();
+        factory(App\Models\Account::class)->create([
+            'user_id' => $user->id,
+            'role_id' => 3
+        ]);
 
         factory(App\User::class, 10)->create()->each(
             function(App\User $user ){

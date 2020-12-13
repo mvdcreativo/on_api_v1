@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\API\UserAPIController;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -27,15 +24,9 @@ class AuthController extends UserAPIController
          
         // $request['password'] = bcrypt($password);
         $user = $this->store($request);
-        // $user = new User([
-        //     'name'     => $request->name,
-        //     'email'    => $request->email,
-        //     'password' => bcrypt($request->password),
-        //     'slug'     => Str::slug($request->name)
-        // ]);
-        // $user->save();
+
         if(isset($user)){
-            // $request['password'] = $request->get('password');
+            
             $newUser =  $this->login($request);
         };
         return response()->json([
@@ -45,7 +36,7 @@ class AuthController extends UserAPIController
     }
 
     //LOGIN
-    public function login(Request $request)
+    public function login(Request $request )
     {
         $request->validate([
             'email'       => 'required|string|email',
@@ -58,6 +49,7 @@ class AuthController extends UserAPIController
                 'message' => 'Unauthorized'], 401);
         }
         $user = $request->user();
+        $user->account;
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
         //
@@ -88,10 +80,19 @@ class AuthController extends UserAPIController
             'Successfully logged out']);
     }
 
+    // //USUARIO
+    // public function user(Request $request)
+    // {
+    //     return response()->json($request->user());
+    //     // return User::all();
+    // }
     //USUARIO
     public function user(Request $request)
     {
-        return response()->json($request->user());
+        // $user = $request->user();
+        $user = Auth::user()->load('account');
+        
+        return response()->json($user);
         // return User::all();
     }
 }

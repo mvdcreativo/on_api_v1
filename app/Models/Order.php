@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -80,7 +81,7 @@ class Order extends Model
 
     public function courses()
     {
-        return $this->belongsToMany('App\Models\Course')
+        return $this->belongsToMany('App\Models\Course')->with("schedules")
         ->using(\App\Models\CourseOrderPivot::class)
         ->withPivot('price', 'currency_id', 'course_id', 'quantity','order_id','user_id');
     }
@@ -101,7 +102,7 @@ class Order extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User')->with('account');
     }
 
 
@@ -125,6 +126,21 @@ class Order extends Model
                 ->orWhere('order_id_mp',$filter);
     }
 
+    public function scopeFilter_enroll($query, $filter)
+    {
+        if($filter)
+
+            return $query
+            ->whereHas('user', function (Builder $q) use ($filter){
+                $q->where('name', "LIKE", '%'.$filter.'%')
+                ->orWhere('last_name', "LIKE", '%'.$filter.'%')
+                ->orWhere('email', "LIKE", '%'.$filter.'%')
+                ->orWhere('n_doc_iden', "LIKE", '%'.$filter.'%');
+            })
+            ->orWhere('id',$filter)
+            ->orWhere('user_id',$filter);
+    }
+
     public function scopeUser($query, $user_id)
     {
         if($user_id)
@@ -133,6 +149,17 @@ class Order extends Model
                 ->where('user_id',$user_id);
 
     }
+
+    public function scopeCourse_id($query, $course_id)
+    {
+        if($course_id)
+            return $query
+            ->whereHas('courses', function (Builder $q) use ($course_id){
+                $q->where('course_id', $course_id);
+            });
+
+    }
+
 
 
 

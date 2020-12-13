@@ -8,6 +8,9 @@ class CourseOrderPivot extends Pivot
 
     public $incrementing = true;
     protected $with=['currency'];
+
+
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      **/

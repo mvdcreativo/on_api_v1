@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -20,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','slug','last_name'
+        'name', 'email', 'password','slug','last_name','social_id'
     ];
 
     /**
@@ -49,7 +50,7 @@ class User extends Authenticatable
      **/
     public function account()
     {
-        return $this->hasOne(\App\Models\Account::class);
+        return $this->hasOne(\App\Models\Account::class)->with("neighborhood","neighborhood.city");
     }
 
 
@@ -76,6 +77,11 @@ class User extends Authenticatable
         if($filter)
 
             return $query
+                ->whereHas('account', function(Builder $q) use ($filter){
+                    $q->where('n_doc_iden', $filter)
+                    ->orWhere('phone_one', "LIKE", '%'.$filter.'%')
+                    ->orWhere('phone_two', "LIKE", '%'.$filter.'%');
+                })
                 ->orWhere('name', "LIKE", '%'.$filter.'%')
                 ->orWhere('email', "LIKE", '%'.$filter.'%');
 

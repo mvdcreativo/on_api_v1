@@ -31,7 +31,7 @@ class CreateAccountsTable extends Migration
             $table->string('birth')->nullable();
             $table->string('n_doc_iden')->nullable();
             $table->string('type_doc_iden')->nullable();            
-            $table->integer('neighborhood_id')->unsigned();
+            $table->integer('neighborhood_id')->unsigned()->nullable();
 
             $table->timestamps();
             $table->softDeletes();

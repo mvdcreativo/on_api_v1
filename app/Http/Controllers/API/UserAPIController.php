@@ -68,8 +68,8 @@ class UserAPIController extends AppBaseController
     public function store(Request $request)
     {
         
-        $input_user = $request->only(['name','last_name','email','password']);
-        $input_account = $request->except(['name','last_name','email','password', 'image']);
+        $input_user = $request->only(['name','last_name','email','password', 'sociel_id']);
+        $input_account = $request->except(['name','last_name','email','password', 'image', 'neighborhood_id']);
         $input_user['slug'] = Str::slug($request->name."-".$request->last_name);
         if($request->role_id) {
             $input_account['role_id'] = (int)$request->role_id;
