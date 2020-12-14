@@ -267,4 +267,7 @@ class UserAPIController extends AppBaseController
 
         return $this->sendResponse($courses->toArray(), 'Courses retrieved successfully');
     }
+
+
+
 }

@@ -67,6 +67,11 @@ class User extends Authenticatable
         ->withPivot('price', 'currency_id', 'course_id', 'quantity','order_id','user_id');
     }
 
+    public function courses_instructor()
+    {
+        return $this->hasMany(\App\Models\Course::class, 'user_instructor_id')->with('categories');
+
+    }
 
     /////////////////////////////
         ///SCOPES

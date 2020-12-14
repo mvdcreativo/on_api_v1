@@ -70,6 +70,7 @@ Route::get('courses-destac', 'CourseAPIController@getCoursesDestac');
 // Route::get('instructors', 'UserAPIController@get_user_instructors');
 Route::apiResource('accounts', 'AccountAPIController');
 Route::apiResource('instructors', 'InstructorAPIController');
+Route::get('courses_instructor', 'InstructorAPIController@courses_instructor');
 Route::apiResource('students', 'StudentAPIController');
 Route::apiResource('states', 'StateAPIController');
 Route::apiResource('cities', 'CityAPIController');

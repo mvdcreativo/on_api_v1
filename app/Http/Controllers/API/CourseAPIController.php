@@ -324,13 +324,6 @@ class CourseAPIController extends AppBaseController
     {
         $query = Course::query();
 
-        if ($request->get('skip')) {
-            $query->skip($request->get('skip'));
-        }
-        if ($request->get('limit')) {
-            $query->limit($request->get('limit'));
-        }
-
         $courses = $query->with('categories', 'lengthUnit', 'user_instructor', 'courseSections', 'currency')
         ->where('status_id', 3)
         ->get();
@@ -352,5 +345,7 @@ class CourseAPIController extends AppBaseController
         return $store;
         
     }
+
+
 
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\API\UpdateInstructorAPIRequest;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\UserAPIController;
+use App\Models\Course;
 use App\User;
 use Response;
 
@@ -47,7 +48,7 @@ class InstructorAPIController extends UserAPIController
         }
 
         $user = $query
-            ->with('account')
+            ->with('account', 'courses_instructor')
             ->filter($filter)
             ->whereHas('account', function($q){
                 $q->where('role_id', 1);
@@ -56,7 +57,34 @@ class InstructorAPIController extends UserAPIController
             // ->orderBy('user.name', $sort)
             ->paginate($per_page);
 
-
         return $this->sendResponse($user->toArray(), 'Statuses retrieved successfully');
+    }
+
+
+    
+
+    public function show($slug)
+    {
+        $user = User::with('account', 'courses_instructor')->where('slug', $slug)->first();
+
+        if (empty($user)) {
+            return $this->sendError('User not found');
+        }
+
+        return $this->sendResponse($user->toArray(), 'User retrieved successfully');
+    }
+
+
+    public function courses_instructor(Request $request)
+    {
+        $query = Course::query();
+
+
+        $courses = $query->with('categories', 'lengthUnit', 'user_instructor', 'courseSections', 'currency')
+        ->whereIn('status_id', [1,3])
+        ->where('user_instructor_id', $request->get('instructor_id'))
+        ->get();
+
+        return $this->sendResponse($courses->toArray(), 'Courses retrieved successfully');
     }
 }
