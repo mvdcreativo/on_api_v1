@@ -34,6 +34,20 @@ class User extends Authenticatable
     ];
 
     /**
+     * Validation rules
+     *
+     * @var array
+     */
+    public static $rules = [
+        'name' => ['required', 'string', 'max:255'],
+        'last_name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        // 'password' => ['required', 'string', 'min:8', 'confirmed'],
+    ];
+
+
+
+    /**
      * The attributes that should be cast to native types.
      *
      * @var array
