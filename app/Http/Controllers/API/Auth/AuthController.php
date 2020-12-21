@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\API\UserAPIController;
+use App\Http\Requests\API\CreateUserAPIRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends UserAPIController
 {
     ///REGISTRO
-    public function signup(Request $request)
+    public function signup(CreateUserAPIRequest $request)
     {
         $request->validate([
             'name'     => 'required|string',
