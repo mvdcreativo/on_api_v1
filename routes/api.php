@@ -64,6 +64,7 @@ Route::apiResource('schedules', 'ScheduleAPIController');
 Route::apiResource('courses', 'CourseAPIController');
 Route::post('clone', 'CourseAPIController@clone');
 Route::get('user_courses/{id}', 'UserAPIController@user_courses');
+Route::get('check-email-exist/{email}', 'UserAPIController@checkEmailExist');
 Route::get('course/{slug}', 'CourseAPIController@showBySlug');
 Route::get('courses-category/{slug}', 'CourseAPIController@getByCategorySlug');
 Route::get('courses-destac', 'CourseAPIController@getCoursesDestac');

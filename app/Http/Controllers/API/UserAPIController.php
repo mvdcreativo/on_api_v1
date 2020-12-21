@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\AppBaseController;
+use App\Http\Requests\API\CreateUserAPIRequest;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\Account;
@@ -65,11 +66,11 @@ class UserAPIController extends AppBaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateUserAPIRequest $request)
     {
         
         $input_user = $request->only(['name','last_name','email','password', 'sociel_id']);
-        $input_account = $request->except(['name','last_name','email','password', 'image', 'neighborhood_id']);
+        $input_account = $request->except(['name','last_name','email','password','sociel_id', 'image',]);
         $input_user['slug'] = Str::slug($request->name."-".$request->last_name);
         if($request->role_id) {
             $input_account['role_id'] = (int)$request->role_id;
@@ -154,8 +155,8 @@ class UserAPIController extends AppBaseController
     {
 
         // return $request->all();
-        $input_user = $request->only(['name','last_name','email','password']);
-        $input_account = $request->except(['name','last_name','email','password', 'image']);
+        $input_user = $request->only(['name','last_name','email','password', 'sociel_id']);
+        $input_account = $request->except(['name','last_name','email','password','sociel_id', 'image']);
         if($request->role_id) $input_account['role_id'] = (int)$request->role_id;
         // return $input_account;
 
@@ -268,6 +269,11 @@ class UserAPIController extends AppBaseController
         return $this->sendResponse($courses->toArray(), 'Courses retrieved successfully');
     }
 
+
+    public function checkEmailExist($email)
+    {
+        return User::where('email', $email)->first();
+    }
 
 
 }
