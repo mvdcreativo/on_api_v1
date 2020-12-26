@@ -81,7 +81,7 @@ class Order extends Model
 
     public function courses()
     {
-        return $this->belongsToMany('App\Models\Course')->with("schedules")
+        return $this->belongsToMany('App\Models\Course')->with("schedules","lengthUnit")
         ->using(\App\Models\CourseOrderPivot::class)
         ->withPivot('price', 'currency_id', 'course_id', 'quantity','order_id','user_id');
     }
