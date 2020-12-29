@@ -71,9 +71,9 @@ class ScheduleAPIController extends AppBaseController
      * @param  \App\Models\Schedule  $schedule
      * @return \Illuminate\Http\Response
      */
-    public function update(Schedule $schedule,UpdateScheduleAPIRequest $request)
+    public function update($id,Request $request)
     {
-        $schedules = Schedule::find($schedule->id);
+        $schedules = Schedule::find($id);
 
         if (empty($schedules)) {
             return $this->sendError('Adquired Skill not found');
@@ -91,9 +91,9 @@ class ScheduleAPIController extends AppBaseController
      * @param  \App\Models\Schedule  $schedule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Schedule $schedule)
+    public function destroy($id)
     {
-        $schedules = Schedule::find($schedule->id);
+        $schedules = Schedule::find($id);
 
         if (empty($schedules)) {
             return $this->sendError('Adquired Skill not found');
