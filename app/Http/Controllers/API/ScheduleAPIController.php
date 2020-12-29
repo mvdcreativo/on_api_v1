@@ -55,7 +55,7 @@ class ScheduleAPIController extends AppBaseController
      */
     public function show(Schedule $schedule)
     {
-        $schedules = Schedules::find($schedule->id);
+        $schedules = Schedule::find($schedule->id);
 
         if (empty($schedules)) {
             return $this->sendError('Adquired Skill not found');

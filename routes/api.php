@@ -25,11 +25,11 @@ Route::group(['prefix' => 'auth'], function () {
         // Route::apiResource('users', 'UserAPIController');
     });
 
-
-
 });
 Route::post('social-auth', 'Auth\SocialAuthController@loginSocial');
 
+Route::apiResource('send-message-contact', 'MessageController');
+Route::apiResource('add_email_newsletter', 'NewsletterListEmailAPIController');
 
 Route::apiResource('users', 'UserAPIController');
 
@@ -64,7 +64,7 @@ Route::apiResource('schedules', 'ScheduleAPIController');
 Route::apiResource('courses', 'CourseAPIController');
 Route::post('clone', 'CourseAPIController@clone');
 Route::get('user_courses/{id}', 'UserAPIController@user_courses');
-Route::get('check-email-exist/{email}', 'UserAPIController@checkEmailExist');
+// Route::get('check-email-exist/{email}', 'UserAPIController@checkEmailExist');
 Route::get('course/{slug}', 'CourseAPIController@showBySlug');
 Route::get('courses-category/{slug}', 'CourseAPIController@getByCategorySlug');
 Route::get('courses-destac', 'CourseAPIController@getCoursesDestac');
@@ -86,6 +86,14 @@ Route::put('lessons_sort','LessonAPIController@sort_lesson');
 Route::group(['prefix' => 'exports'], function () {
     ///Exports
     Route::get('student_course', 'OrderAPIController@export_students_course_excel');
-  
 
+});
+Route::group([    
+    'namespace' => 'Auth',    
+    'middleware' => 'api',    
+    'prefix' => 'password'
+], function () {    
+    Route::post('create', 'PasswordResetController@create');
+    Route::get('find/{token}', 'PasswordResetController@find');
+    Route::post('reset', 'PasswordResetController@reset');
 });
