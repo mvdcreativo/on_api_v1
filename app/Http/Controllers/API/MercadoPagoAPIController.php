@@ -88,13 +88,13 @@ class MercadoPagoAPIController extends AppBaseController
     # Save External Reference
     $preference->external_reference = $order->id;
     $preference->back_urls = [
-      "success" => env('MP_URL_SUCCESS', 'http://localhost:4200/pago-exitoso'),
-      "pending" => env('MP_URL_PENDING', 'http://localhost:4200/pago-pendiente'),
-      "failure" => env('MP_URL_FAILURE', 'http://localhost:4200/pago-error'),
+      "success" => env('MP_URL_SUCCESS', 'https://oncapacitaciones.com/mi-cuenta'),
+      "pending" => env('MP_URL_PENDING', 'https://oncapacitaciones.com/mi-cuenta'),
+      "failure" => env('MP_URL_FAILURE', 'https://oncapacitaciones.com/mi-cuenta'),
     ];
 
     $preference->auto_return = "approved";
-    $preference->notification_url = env('MP_URL_NOTIFICACION', 'http://localhost:4200');
+    $preference->notification_url = env('MP_URL_NOTIFICACION', 'https://api.oncapacitaciones.com/api/api/notification-cobro');
     // $preference->notification_url = 'http://mvdcreativo.servehttp.com/apiNuevaEra/public/api/notification-cobro';
     # Save and POST preference
     // dd($preference);
