@@ -76,6 +76,7 @@ Route::apiResource('students', 'StudentAPIController');
 Route::apiResource('states', 'StateAPIController');
 Route::apiResource('cities', 'CityAPIController');
 Route::apiResource('neighborhoods', 'NeighborhoodAPIController');
+Route::post('notification-cobro', 'NotificationMercadoPagoController@store');
 
 // Route::get('instructors', 'InstructorAPIController');
 
