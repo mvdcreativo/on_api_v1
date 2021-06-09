@@ -94,7 +94,7 @@ class MercadoPagoAPIController extends AppBaseController
     ];
 
     $preference->auto_return = "approved";
-    $preference->notification_url = env('MP_URL_NOTIFICACION', 'https://api.oncapacitaciones.com/api/api/notification-cobro');
+    $preference->notification_url = env('MP_URL_NOTIFICACION', 'https://api.oncapacitaciones.com/api/notification-cobro');
     // $preference->notification_url = 'http://mvdcreativo.servehttp.com/apiNuevaEra/public/api/notification-cobro';
     # Save and POST preference
     // dd($preference);
