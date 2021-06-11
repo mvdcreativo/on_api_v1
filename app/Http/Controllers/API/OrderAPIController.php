@@ -49,7 +49,7 @@ class OrderAPIController extends AppBaseController
         
         
         $orders = $query
-            ->with('courses', 'currency', 'user')
+            ->with('courses', 'currency', 'user', 'status')
             ->filter($filter)
             ->user($user_id)
             ->course_id($course_id)
@@ -146,7 +146,7 @@ class OrderAPIController extends AppBaseController
     public function show($id)
     {
 
-        $order = Order::with('courses','user')->find($id);
+        $order = Order::with('courses','user','status')->find($id);
 
         if (empty($order)) {
             return $this->sendError('Order not found');
