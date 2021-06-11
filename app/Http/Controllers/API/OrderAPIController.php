@@ -182,9 +182,6 @@ class OrderAPIController extends AppBaseController
         if($request->get('payment_status_slug')){
             $status = Status::where('slug',$request->get('payment_status_slug'))->first();
             $order->status_id = $status->id;
-        }else{
-            $status = Status::where('slug','payment_required')->first();
-            $order->status_id = $status->id;
         }
         
 
