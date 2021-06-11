@@ -8,6 +8,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 
 use App\Exports\StudentsCourseExport;
+use App\Models\Status;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -71,6 +72,14 @@ class OrderAPIController extends AppBaseController
         $input = $request->all();
         $order = new Order;
         $order->fill($input);
+        if($request->get('payment_status_slug')){
+            $status = Status::where('slug',$request->get('payment_status_slug'))->first();
+            $order->status_id = $status->id;
+        }else{
+            $status = Status::where('slug','payment_required')->first();
+            $order->status_id = $status->id;
+        }
+        
 
 
         if (count($request->get('products')) >= 1) {
@@ -167,7 +176,81 @@ class OrderAPIController extends AppBaseController
      */
     public function update(Request $request, $id)
     {
+        $input = $request->all();
         $order = Order::find($id);
+        $order->fill($input);
+        if($request->get('payment_status_slug')){
+            $status = Status::where('slug',$request->get('payment_status_slug'))->first();
+            $order->status_id = $status->id;
+        }else{
+            $status = Status::where('slug','payment_required')->first();
+            $order->status_id = $status->id;
+        }
+        
+
+
+        if (count($request->get('products')) >= 1) {
+
+
+            foreach ($request->get('products') as $key => $product) {
+
+                $course = Course::find($product['course_id']);
+                if (empty($course)) {
+                    return $this->sendError('Course not found');
+                }
+                $cupos_confirmed = $course->cupos_confirmed;
+
+                if ($cupos_confirmed <= $course->cupos) {
+                    $course->cupos_confirmed = $cupos_confirmed + 1;
+                    if ($course->cupos_confirmed >= $course->cupos){
+                        $course->status_id = 2;
+                        $course->save();
+                        $new_course = Course::whereIn('original_id', [$course->original_id, $course->id])
+                            ->where('group', $course->group + 1)
+                            ->first();
+                        if (empty($new_course)) {
+                            return $this->sendError('New Course not found');
+                        }
+                        $new_course->status_id = 1;
+                        $new_course->save();
+                        
+                    }
+                        
+
+                } else {
+                    $course->status_id = 2;
+                    $course->save();
+                    $new_course = Course::whereIn('original_id', [$course->original_id, $course->id])
+                        ->where('group', $course->group + 1)
+                        ->first();
+                    
+                    $new_course->status_id = 1;
+                    $new_course->save();
+
+                    return response()->json(
+                        [
+                            "course" => $course,
+                            "new_course" => $new_course,
+                            "message" => "Los cupos estan completos"
+                        ],
+                        200
+                    );
+                }
+            }
+            $course->save();
+            $order->save();
+            $order->courses()->attach($request->get('products'));
+            $order->courses;
+            $order->user->account;
+            
+            if($request->get('type_pay') && $request->get('type_pay') == "PL"){
+                return $this->sendResponse($order->toArray(), 'Order saved successfully');
+            }
+            if($order->courses) {
+                $generate_payment = new MercadoPagoAPIController;
+                return response()->json(["init_point" => $generate_payment->generate_payment_initpoint($order)], 200);
+            }
+        }
 
         return $this->sendResponse($order->toArray(), 'Order updated successfully');
     }
