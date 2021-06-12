@@ -12,7 +12,8 @@ use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image as AlterImage;
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductFacebookExport;
 
 use Response;
 
@@ -346,6 +347,10 @@ class CourseAPIController extends AppBaseController
         
     }
 
+    public function exportFaceboock(){
+        // Storage::disk('public')->put('images/productos',  $img);
+        return Excel::store(new ProductFacebookExport, 'da_catalog_commerce_commented_template.csv', storage_path('storage/excel/exports'));//'da_catalog_commerce_commented_template.csv'
 
+    }
 
 }

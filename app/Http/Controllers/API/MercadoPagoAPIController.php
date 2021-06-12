@@ -83,6 +83,14 @@ class MercadoPagoAPIController extends AppBaseController
     # Setting preference properties
     $preference->items = $items;
     $preference->payer = $payer;
+    $preference->tracks = array(
+      array(
+        'type' => 'facebook_ad',
+        'values'=> array(
+          'pixel_id' => '190731765336240'
+        )
+      )
+    );
 
 
     # Save External Reference

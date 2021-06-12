@@ -68,6 +68,7 @@ Route::get('user_courses/{id}', 'UserAPIController@user_courses');
 Route::get('course/{slug}', 'CourseAPIController@showBySlug');
 Route::get('courses-category/{slug}', 'CourseAPIController@getByCategorySlug');
 Route::get('courses-destac', 'CourseAPIController@getCoursesDestac');
+Route::get('export_faceboock', 'CourseAPIController@exportFaceboock');
 // Route::get('instructors', 'UserAPIController@get_user_instructors');
 Route::apiResource('accounts', 'AccountAPIController');
 Route::apiResource('instructors', 'InstructorAPIController');
