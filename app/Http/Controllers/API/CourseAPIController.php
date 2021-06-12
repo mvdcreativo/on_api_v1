@@ -349,7 +349,9 @@ class CourseAPIController extends AppBaseController
 
     public function exportFaceboock(){
         // Storage::disk('public')->put('images/productos',  $img);
-        return Excel::store(new ProductFacebookExport, 'da_catalog_commerce_commented_template.csv', storage_path('storage/excel/exports'));//'da_catalog_commerce_commented_template.csv'
+        return Excel::download(new ProductFacebookExport, 'da_catalog_commerce_commented_template.csv');//'da_catalog_commerce_commented_template.csv'
+
+        // return Excel::store(new ProductFacebookExport, 'da_catalog_commerce_commented_template.csv', storage_path('storage/excel/exports'));//'da_catalog_commerce_commented_template.csv'
 
     }
 

@@ -17,40 +17,45 @@ class ProductFacebookExport implements WithMapping, WithHeadings, FromCollection
 
     public function collection()
     {
-        return Course::with('categories')->whereIn('status_id', [1,3])->get();
+        $query = Course::query();
+        $courses = $query
+            ->with('categories')
+            ->whereIn('status_id', [1,3])
+            ->get();
+        return $courses;
     }
 
  
-    public function map($product): array
+    public function map($course): array
     {
-        if($product->description){
-            $description = $product->description;
+        if($course->description){
+            $description = $course->description;
         }else{
-            $description = $product->title;
+            $description = $course->title;
         }
-        if($product->brand && $product->brand->name ){
+        if($course->brand && $course->brand->name ){
             $brand = "oncapacitaciones";
         }else{
-            $product->delete();
+            $course->delete();
             $brand = "sin-marca";
         }
 
-        if( $product->categories && $product->categories[0]->name){
-            $categories = $product->categories[0]->name;
+        if( $course->categories && $course->categories[0]->name){
+            $categories = $course->categories[0]->name;
         }else{
-            $product->delete();
+            $course->delete();
             $categories = "sin-categoria";
         }
 
         return [
-            $product->id,
-            trim(ucwords(strtolower( "\"".$product->name."\""))),
+            $course->id,
+            trim(ucwords(strtolower( "\"".$course->name."\""))),
             trim(ucfirst(strtolower(str_replace("\r\n", " ", "\"".$description."\"")))),
             "in stock" ,
             "new",
-            $product->price."UYU",
-            "https://www.oncapacitaciones.com/cursos/curso/".$product->slug ,
-            "https://api.oncapacitaciones.com/storage/images/courses/larg/".$product->image,
+            $course->price."UYU",
+            "https://www.oncapacitaciones.com/cursos/curso/".$course->slug ,
+            "https://api.oncapacitaciones.com/storage/images/courses/larg/".$course->image,
             trim(ucwords(strtolower("oncapacitaciones"))),
             null,
             null,
@@ -60,7 +65,7 @@ class ProductFacebookExport implements WithMapping, WithHeadings, FromCollection
             null,
             null,
             trim(ucwords(strtolower($categories))),
-            $product->price,
+            $course->price,
             null ,
             null,
             null,
@@ -92,9 +97,9 @@ class ProductFacebookExport implements WithMapping, WithHeadings, FromCollection
             'color',
             'gender',
             'item_group_id',
-            'google_product_category',
+            'google_course_category',
             'pattern',
-            'product_type',
+            'course_type',
             'sale_price',
             'sale_price_effective_date',
             'shipping',
@@ -113,32 +118,32 @@ class ProductFacebookExport implements WithMapping, WithHeadings, FromCollection
 
     // public function array(): array
     // {
-    //     $products = Product::with('brand','category');
+    //     $courses = course::with('brand','category');
 
-    //     if($products){
+    //     if($courses){
 
     //         $result = Array();
             
-    //         foreach ($products as $product) {
+    //         foreach ($courses as $course) {
                 
     //             $result[]= [
-    //                 'id' => $product->id,
-    //                 'title' => $product->name ,
-    //                 'description' => $product->description ,
+    //                 'id' => $course->id,
+    //                 'title' => $course->name ,
+    //                 'description' => $course->description ,
     //                 'availability' => "in stock" ,
     //                 'condition' => "new",
-    //                 'price' => $product->price,
-    //                 'link' => "https://nuevaerauruguay.com/producto/".$product->slug ,
-    //                 'image_link' => "https://api.nuevaerauruguay.com/storage/images/productos/".$product->slug,
-    //                 'brand' => $product->brand->name ,
+    //                 'price' => $course->price,
+    //                 'link' => "https://nuevaerauruguay.com/courseo/".$course->slug ,
+    //                 'image_link' => "https://api.nuevaerauruguay.com/storage/images/courseos/".$course->slug,
+    //                 'brand' => $course->brand->name ,
     //                 'additional_image_link' => null ,
     //                 'color' => null ,
     //                 'gender' => null ,
     //                 'item_group_id' => null ,
-    //                 'google_product_category'  => null ,
+    //                 'google_course_category'  => null ,
     //                 'pattern' => null ,
-    //                 'product_type' => $product->category->name ,
-    //                 'sale_price' => $product->price ,
+    //                 'course_type' => $course->category->name ,
+    //                 'sale_price' => $course->price ,
     //                 'sale_price_effective_date' => null ,
     //                 'shipping' => "Gratis" ,
     //                 'shipping_weight' => null ,
