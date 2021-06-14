@@ -33,17 +33,11 @@ class ProductFacebookExport implements WithMapping, WithHeadings, FromCollection
         }else{
             $description = $course->title;
         }
-        if($course->brand && $course->brand->name ){
-            $brand = "oncapacitaciones";
-        }else{
-            $course->delete();
-            $brand = "sin-marca";
-        }
 
         if( $course->categories && $course->categories[0]->name){
             $categories = $course->categories[0]->name;
         }else{
-            $course->delete();
+            
             $categories = "sin-categoria";
         }
 
@@ -62,7 +56,7 @@ class ProductFacebookExport implements WithMapping, WithHeadings, FromCollection
             null,
             null,
             null,
-            null,
+            'School Uniforms',
             null,
             trim(ucwords(strtolower($categories))),
             $course->price,
@@ -97,9 +91,9 @@ class ProductFacebookExport implements WithMapping, WithHeadings, FromCollection
             'color',
             'gender',
             'item_group_id',
-            'google_course_category',
+            'google_product_category',
             'pattern',
-            'course_type',
+            'product_type',
             'sale_price',
             'sale_price_effective_date',
             'shipping',
