@@ -36,7 +36,9 @@ class Order extends Model
         'address_one',
         'n_doc_iden',
         'type_doc_iden',
-        'currency_id'
+        'currency_id',
+        'cuotas',
+        'amount_cuota'
 
 
     ];
@@ -65,6 +67,8 @@ class Order extends Model
         'n_doc_iden'=> 'string',
         'type_doc_iden'=> 'string',
         'currency_id' => 'integer',
+        'cuotas' => 'interger',
+        'amount_cuota' => 'string',
     ];
 
 
