@@ -43,13 +43,13 @@ class ProductFacebookExport implements WithMapping, WithHeadings, FromCollection
 
         return [
             $course->id,
-            trim(ucwords(strtolower( "\"".$course->name."\""))),
+            trim(ucwords(strtolower( "\"".$course->title."\""))),
             trim(ucfirst(strtolower(str_replace("\r\n", " ", "\"".$description."\"")))),
             "in stock" ,
             "new",
             $course->price."UYU",
             "https://www.oncapacitaciones.com/cursos/curso/".$course->slug ,
-            "https://api.oncapacitaciones.com/storage/images/courses/larg/".$course->image,
+            $course->image,
             trim(ucwords(strtolower("oncapacitaciones"))),
             null,
             null,
