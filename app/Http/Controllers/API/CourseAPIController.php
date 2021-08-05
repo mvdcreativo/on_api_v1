@@ -97,7 +97,7 @@ class CourseAPIController extends AppBaseController
                 $url = 'images/courses/';
                 $original_name = $image->getClientOriginalName();
                 $ext = "." . pathinfo($original_name, PATHINFO_EXTENSION);
-                $imageNewName = $course->id . '-' . time() . $ext;
+                $imageNewName = $course->id . Str::random(4) .'-' . time() . $ext;
 
                 $path_larg = $url . 'larg/' . $imageNewName;
                 $path_medium = $url . 'medium/' . $imageNewName;
@@ -199,7 +199,7 @@ class CourseAPIController extends AppBaseController
                 $url = 'images/courses/';
                 $original_name = $image->getClientOriginalName();
                 $ext = "." . pathinfo($original_name, PATHINFO_EXTENSION);
-                $imageNewName = $course->id . '-' . time() . $ext;
+                $imageNewName = $course->id . Str::random(4) . '-' . time() . $ext;
 
                 $path_larg = $url . 'larg/' . $imageNewName;
                 $path_medium = $url . 'medium/' . $imageNewName;

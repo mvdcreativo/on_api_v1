@@ -84,7 +84,7 @@ class CarouselController extends AppBaseController
                 $url = 'images/carousels/';
                 $original_name = $image->getClientOriginalName();
                 $ext = "." . pathinfo($original_name, PATHINFO_EXTENSION);
-                $imageNewName = $carousel->id . '-' . time() . $ext;
+                $imageNewName = $carousel->id . Str::random(4) . '-' . time() . $ext;
 
                 $path_larg = $url . 'larg/' . $imageNewName;
                 $path_medium = $url . 'medium/' . $imageNewName;
@@ -166,7 +166,7 @@ class CarouselController extends AppBaseController
                 $url = 'images/carousels/';
                 $original_name = $image->getClientOriginalName();
                 $ext = "." . pathinfo($original_name, PATHINFO_EXTENSION);
-                $imageNewName = $carousel->id . '-' . time() . $ext;
+                $imageNewName = $carousel->id . Str::random(4) . '-' . time() . $ext;
 
                 $path_larg = $url . 'larg/' . $imageNewName;
                 $path_medium = $url . 'medium/' . $imageNewName;
