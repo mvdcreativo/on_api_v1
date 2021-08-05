@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'Auth\AuthController@login');
     Route::post('signup', 'Auth\AuthController@signup');
-  
+
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'Auth\AuthController@logout');
         Route::get('user', 'Auth\AuthController@user');
@@ -59,6 +59,9 @@ Route::apiResource('adquired_skills', 'AdquiredSkillAPIController');
 Route::apiResource('categories', 'CategoryAPIController');
 
 Route::apiResource('schedules', 'ScheduleAPIController');
+Route::apiResource('images', 'ImageAPIController');
+Route::apiResource('carousels', 'CarouselController');
+Route::get('carousel-active', 'CarouselController@active');
 
 
 Route::apiResource('courses', 'CourseAPIController');
@@ -90,11 +93,11 @@ Route::group(['prefix' => 'exports'], function () {
     Route::get('student_course', 'OrderAPIController@export_students_course_excel');
 
 });
-Route::group([    
-    'namespace' => 'Auth',    
-    'middleware' => 'api',    
+Route::group([
+    'namespace' => 'Auth',
+    'middleware' => 'api',
     'prefix' => 'password'
-], function () {    
+], function () {
     Route::post('create', 'PasswordResetController@create');
     Route::get('find/{token}', 'PasswordResetController@find');
     Route::post('reset', 'PasswordResetController@reset');

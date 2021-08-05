@@ -11,7 +11,7 @@ class Order extends Model
 {
     use SoftDeletes;
 
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -78,14 +78,14 @@ class Order extends Model
      * @var array
      */
     public static $rules = [
-        
+
     ];
 
 
 
     public function courses()
     {
-        return $this->belongsToMany('App\Models\Course')->with("schedules","lengthUnit")
+        return $this->belongsToMany('App\Models\Course')->with("schedules","lengthUnit", "user_instructor")
         ->using(\App\Models\CourseOrderPivot::class)
         ->withPivot('price', 'currency_id', 'course_id', 'quantity','order_id','user_id');
     }

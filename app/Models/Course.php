@@ -13,10 +13,10 @@ class Course extends Model
 {
     use SoftDeletes, HasDuplicates;
 
-    
+
 
     public $table = 'courses';
-    
+
 
     protected $dates = ['deleted_at'];
 
@@ -87,7 +87,7 @@ class Course extends Model
      * @var array
      */
     public static $rules = [
-        
+
     ];
 
     /**
@@ -167,6 +167,10 @@ class Course extends Model
         return $this->belongsToMany('App\Models\Order');
     }
 
+    public function images()
+    {
+        return $this->belongsToMany('App\Models\Image', 'images_courses')->orderBy('position', 'ASC');
+    }
     /////////////////////////////
         ///SCOPES
     /////////////////////////////

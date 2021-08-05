@@ -55,7 +55,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
     ///RELATIONSHIP
 
 
@@ -77,6 +77,7 @@ class User extends Authenticatable
     public function courses()
     {
         return $this->belongsToMany('App\Models\Course', 'course_order')
+        ->with('user_instructor')
         ->using(\App\Models\CourseOrderPivot::class)
         ->withPivot('price', 'currency_id', 'course_id', 'quantity','order_id','user_id');
     }
@@ -107,5 +108,5 @@ class User extends Authenticatable
 
     }
 
-    
+
 }

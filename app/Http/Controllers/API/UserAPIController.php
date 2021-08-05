@@ -38,7 +38,7 @@ class UserAPIController extends AppBaseController
         }else{
             $per_page = 20;
         }
-        
+
         if ($request->get('sort')) {
             $sort = $request->get('sort');
         }else{
@@ -68,7 +68,7 @@ class UserAPIController extends AppBaseController
      */
     public function store(CreateUserAPIRequest $request)
     {
-        
+
         $input_user = $request->only(['name','last_name','email','password', 'sociel_id']);
         $input_account = $request->except(['name','last_name','email','password','sociel_id', 'image',]);
         $input_user['slug'] = Str::slug($request->name."-".$request->last_name);
@@ -90,14 +90,14 @@ class UserAPIController extends AppBaseController
             $account->fill($input_account);
             $account->user()->associate($user);
             $account->save();
-        
+
 
             if($request->hasFile('image')){
                 $image = $request->file('image');
                 $this->validate($request, [
 
                     'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048000'
-        
+
                 ]);
 
                 $url = 'images/users/';
@@ -110,7 +110,7 @@ class UserAPIController extends AppBaseController
 
                 // return [$larg_img , $medium_img , $small_img] ;
                 if ($larg_img) {
-                    
+
                     $account->fill(
                         [
                             'image' => asset('storage/'.$path_larg),
@@ -135,7 +135,7 @@ class UserAPIController extends AppBaseController
      */
     public function show($id)
     {
-        $user = User::with('account')->find($id);
+        $user = User::with('account','courses')->find($id);
 
         if (empty($user)) {
             return $this->sendError('User not found');
@@ -177,7 +177,7 @@ class UserAPIController extends AppBaseController
             $this->validate($request, [
 
                 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048000'
-    
+
             ]);
 
             $url = 'images/users/';
@@ -190,7 +190,7 @@ class UserAPIController extends AppBaseController
 
             // return [$larg_img , $medium_img , $small_img] ;
             if ($larg_img) {
-                
+
                 $user->account->fill(
                     [
                         'image' => asset('storage/'.$path_larg),
@@ -221,7 +221,7 @@ class UserAPIController extends AppBaseController
 
         $account->delete();
 
-        return $this->sendSuccess('User deleted successfully');    
+        return $this->sendSuccess('User deleted successfully');
     }
 
     private function transformImage($image, $width, $height, $path)
@@ -234,7 +234,7 @@ class UserAPIController extends AppBaseController
         // $larg_image->crop(1280,800);
         $store = Storage::disk('public')->put( $path, $result_image->stream());
         return $store;
-        
+
     }
 
 
@@ -242,13 +242,13 @@ class UserAPIController extends AppBaseController
     public function user_courses($id, Request $request)
     {
         $query = User::find($id);
-        
+
         if ($request->get('per_page')) {
             $per_page = $request->get('per_page');
         }else{
             $per_page = 20;
         }
-        
+
         if ($request->get('sort')) {
             $sort = $request->get('sort');
         }else{
