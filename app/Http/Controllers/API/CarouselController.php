@@ -9,6 +9,7 @@ use App\Models\Carousel;
 use App\Models\Image;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image as AlterImage;
+use Illuminate\Support\Str;
 
 
 
