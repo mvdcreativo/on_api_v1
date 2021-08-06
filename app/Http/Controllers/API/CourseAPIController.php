@@ -348,7 +348,7 @@ class CourseAPIController extends AppBaseController
     public function getByCategorySlug($slug)
     {
         $category = Category::select(['id', 'slug', 'color', 'name'])
-            ->with('courses', 'courses.courseSections', 'courses.lengthUnit', 'courses.categories', 'courses.currency', 'courses.user_instructor', 'courses.schedules')
+            ->with('courses', 'courses.courseSections', 'courses.lengthUnit', 'courses.categories', 'courses.currency', 'courses.user_instructor', 'courses.schedules', 'courses.images')
             ->filter_status()
             ->where('slug', $slug)
             // ->whereIn('status_id', [1,3])
